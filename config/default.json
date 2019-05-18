@@ -1,0 +1,19 @@
+{
+  "db": {
+    "debug": false,
+    "client": "postgresql",
+    "connection": {
+      "host": "postgres",
+      "database": "postgres",
+      "user": "postgres",
+      "password": "postgres"
+    },
+    "seeds": {
+      "directory": "./database/seeds"
+    },
+    "migrations": {
+      "directory": "./database/migrations"
+    }
+  }
+}
+

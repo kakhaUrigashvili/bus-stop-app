@@ -1,0 +1,9 @@
+**/.DS_Store
+Dockerfile
+docker-compose.yml
+newrelic_agent.log
+npm-debug.log
+.git
+.gitignore
+.vscode
+node_modules
