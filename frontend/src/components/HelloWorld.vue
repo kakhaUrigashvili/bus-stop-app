@@ -10,7 +10,7 @@
 import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/polar'
-import axios from 'axios'
+import {HTTP} from './../http-common'
 
 export default {
   components: {
@@ -61,8 +61,8 @@ export default {
     }
   },
   mounted () {
-    axios
-      .get('http://localhost:3000/api/sample-data')
+    HTTP
+      .get('sample-data')
       .then(response => {
         this.info = response.data
         this.$log.info(this.info)
