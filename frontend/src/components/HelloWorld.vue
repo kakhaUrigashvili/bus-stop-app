@@ -3,21 +3,14 @@
 </template>
 
 <style>
-/**
- * The default size is 600px×400px, for responsive charts
- * you may need to set percentage values as follows (also
- * don't forget to provide a size for the container).
- */
-/* .echarts {
-  width: 100%;
-  height: 100%;
-} */
+
 </style>
 
 <script>
 import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/polar'
+import axios from 'axios'
 
 export default {
   components: {
@@ -30,7 +23,6 @@ export default {
         let r = Math.sin(2 * t) * Math.cos(2 * t)
         data.push([r, i])
     }
-    this.$log.info(data);
     return {
       polar: {
         title: {
@@ -67,6 +59,19 @@ export default {
         animationDuration: 2000
       }
     }
+  },
+  mounted () {
+    axios
+      .get('http://localhost:3000/api/sample-data')
+      .then(response => {
+        this.info = response.data
+        this.$log.info(this.info)
+      })
+      .catch(error => {
+        this.$log.error(error)
+        this.errored = true
+      })
+      .finally(() => this.loading = false)
   }
 }
 </script>

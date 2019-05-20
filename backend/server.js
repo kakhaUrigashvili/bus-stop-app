@@ -1,7 +1,7 @@
 const express = require('express');
 const log = require('fancy-log');
-const path = require('path');
 const morgan = require('morgan');
+const pck = require('./package.json');
 const corsMiddleware = require('./middleware/cors');
 const notFoundMiddleware = require('./middleware/not-found');
 const vizApiRoutes = require('./routes/viz-api-route');
@@ -15,10 +15,10 @@ app.use(morgan('tiny'));
 app.use(corsMiddleware());
 
 // api routes
-app.use('/api/v1', vizApiRoutes);
+app.use('/api', vizApiRoutes);
 
-// frontend resources
-app.use('/', express.static(path.join(__dirname, 'public')));
+// main route
+app.use('/', (req, res) => res.json({app: pck.name, version: pck.version}));
 
 // after request middleware
 app.use(notFoundMiddleware);
