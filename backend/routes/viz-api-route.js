@@ -3,6 +3,7 @@ const controller = require('./../controllers/viz-api-controller');
 
 const router = express.Router();
 
-router.get('/sample-data', controller.getList());
+router.get('/routes-most-stops', controller.getRoutesWithMostStops());
+router.get('/stops-most-routes', controller.getStopsWithMostRoutes());
 
 module.exports = router;

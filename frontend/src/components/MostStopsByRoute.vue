@@ -1,0 +1,32 @@
+<template>
+<v-chart :options="chartData"/>
+</template>
+
+<style>
+.echarts {
+  width: 800px;
+  height: 600px;
+}
+</style>
+
+<script>
+import ECharts from 'vue-echarts'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
+import getData from './../data/mostStopsByRoute' 
+
+export default {
+  components: {
+    'v-chart': ECharts
+  },
+  data () {
+    return {
+      chartData: null
+    }
+  },
+  mounted () {
+    getData().then(data => this.chartData = data)
+  }
+}
+</script>
