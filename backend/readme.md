@@ -1,4 +1,4 @@
-# Bus Stop App
+# Bus Stop App Backend
 
 ## Setup
 

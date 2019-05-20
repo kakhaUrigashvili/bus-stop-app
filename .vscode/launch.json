@@ -7,10 +7,10 @@
       {
           "type": "node",
           "request": "attach",
-          "name": "Start - Debug",
+          "name": "Backend",
           "port": 9222,
           "address": "localhost",
-          "localRoot": "${workspaceRoot}",
+          "localRoot": "${workspaceRoot}/backend",
           "remoteRoot": "/usr/src/app",
           "protocol": "inspector"
       }
