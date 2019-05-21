@@ -3,10 +3,6 @@
 </template>
 
 <style>
-.echarts {
-  width: 800px;
-  height: 600px;
-}
 </style>
 
 <script>

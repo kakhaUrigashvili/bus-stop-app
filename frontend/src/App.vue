@@ -15,6 +15,7 @@
               <div class="navbar-dropdown">
                 <a class="navbar-item" href="#map">Map</a>
                 <a class="navbar-item" href="#toproutes">Top 10 Routes by # of Stops</a>
+                <a class="navbar-item" href="#topstops">Top 10 Stops by # of Routes</a>
               </div>
             </div>
           </div>
@@ -37,6 +38,12 @@
           <MostRoutesByStop/>
         </div>
       </div>
+      <div class="section" id="topstops">
+        <div class="container">
+          <h4 class="title"><span>Top 10 Stops by # of Routes</span></h4>
+          <MostStopsByRoute/>
+        </div>
+      </div>
     
   </div>
       
@@ -48,13 +55,15 @@
 import TotalStats from "./components/TotalStats";
 import GeoJSON2 from "./components/GeoJSON2";
 import MostRoutesByStop from "./components/MostRoutesByStop";
+import MostStopsByRoute from "./components/MostStopsByRoute";
 
 export default {
   name: 'app',
   components: {
     TotalStats,
     GeoJSON2,
-    MostRoutesByStop
+    MostRoutesByStop,
+    MostStopsByRoute
   }
 }
 </script>
@@ -65,6 +74,11 @@ export default {
 
 body {
   background: #f5f5f5;
+}
+
+.echarts {
+  width: 100%;
+  height: 600px;
 }
 
 
