@@ -44,6 +44,22 @@ const getBoardingsPerLocation = () => async (req, res) => {
     res.json(data.rows);
 };
 
+const getTotalStats = () => async (req, res) => {
+    const data = await knex.raw(`
+    SELECT 
+        COUNT(DISTINCT stop_id) AS "numberOfStops",
+        COUNT(DISTINCT route) AS "numberOfRoutes",
+        (SELECT SUM(boardings) FROM ${TABLE})::INT AS "monthlyNumberOfBoardings"
+    FROM (
+    SELECT
+        stop_id,
+        UNNEST(routes) AS route
+    FROM
+    ${TABLE}
+    ) AS T;`);
+    res.json(data.rows[0]);
+};
+
 const chicagoGeo = () => async (req, res) => {
     const filePath = path.join(__dirname, '../resources', 'chicago.geojson');
     const data = await readFileAsync(filePath, 'utf8');
@@ -83,6 +99,7 @@ const geoPoints = () => async (req, res) => {
 module.exports = {
     getRoutesWithMostStops,
     getStopsWithMostRoutes,
+    getTotalStats,
     getBoardingsPerLocation,
     chicagoGeo,
     geoPoints

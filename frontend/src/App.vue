@@ -19,8 +19,12 @@
             </div>
           </div>
         </div>
-    </nav>
-      
+      </nav>
+      <div class="section">
+        <div class="container">
+          <TotalStats/>
+        </div>
+      </div>
       <div class="section" id="map">
         <div class="container">
           <h4 class="title"><span>Map</span></h4>
@@ -41,12 +45,14 @@
 
 <script>
 
+import TotalStats from "./components/TotalStats";
 import GeoJSON2 from "./components/GeoJSON2";
 import MostRoutesByStop from "./components/MostRoutesByStop";
 
 export default {
   name: 'app',
   components: {
+    TotalStats,
     GeoJSON2,
     MostRoutesByStop
   }
