@@ -51,9 +51,39 @@ const chicagoGeo = () => async (req, res) => {
     res.send(data);
 };
 
+const geoPoints = () => async (req, res) => {
+    const data = await knex.raw(`
+    SELECT
+        stop_id,
+        location,
+        on_street,
+        cross_street
+    FROM
+        ${TABLE};`);
+    const features = data.rows.map(i => ({
+        geometry: {
+            type: 'Point',
+            coordinates: [i.location[1], i.location[0]]
+        },
+        type: 'Feature',
+        properties: {
+            popupContent: `${i.on_street}/${i.cross_street}`
+        },
+        id: i.stop_id
+    }));
+
+    const geoJson = {
+        type: 'FeatureCollection',
+        features
+    };
+
+    res.json(geoJson);
+};
+
 module.exports = {
     getRoutesWithMostStops,
     getStopsWithMostRoutes,
     getBoardingsPerLocation,
-    chicagoGeo
+    chicagoGeo,
+    geoPoints
 };

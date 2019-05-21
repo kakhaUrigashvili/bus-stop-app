@@ -1,27 +1,31 @@
 <template>
-  <div class="uk-container" id="app">
-    <vk-grid gutter="large" >
-      <MostStopsByRoute/>
-      <MostRoutesByStop/>
-      <ChicagoMap/>
-    </vk-grid>
-  </div>
+  
+      <GeoJSON2/>
+
 </template>
 
 <script>
-import MostStopsByRoute from './components/MostStopsByRoute.vue'
-import MostRoutesByStop from './components/MostRoutesByStop.vue'
-import ChicagoMap from './components/ChicagoMap.vue'
+
+import GeoJSON2 from "./components/GeoJSON2";
 
 export default {
   name: 'app',
   components: {
-    MostStopsByRoute,
-    MostRoutesByStop,
-    ChicagoMap
+    GeoJSON2
   }
 }
 </script>
 
 <style>
+@import "../node_modules/leaflet/dist/leaflet.css";
+.leaflet-fake-icon-image-2x {
+  background-image: url(../node_modules/leaflet/dist/images/marker-icon-2x.png);
+}
+.leaflet-fake-icon-shadow {
+  background-image: url(../node_modules/leaflet/dist/images/marker-shadow.png);
+}
+body {
+  margin: 0px;
+  font-family: Helvetica, Verdana, sans-serif;
+}
 </style>

@@ -13,8 +13,11 @@
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "echarts": "^4.2.1",
+    "leaflet": "^1.5.1",
+    "leaflet.icon.glyph": "^0.2.1",
     "vue": "^2.6.10",
     "vue-echarts": "^4.0.3",
+    "vue2-leaflet": "^2.1.1",
     "vuejs-logger": "1.5.3",
     "vuikit": "^0.8.10"
   },
