@@ -10,11 +10,6 @@ export default function getChartData () {
       const keys = data.map(i => `Route # : ${i.route}`);
 
         return {
-            title: 
-            {
-                text: 'Top 10 Routes by # of Stops',
-                x: 'center'
-            },
             tooltip: {
                 trigger: 'item'
             },
@@ -22,7 +17,7 @@ export default function getChartData () {
             xAxis: {},
             yAxis: {data: keys},
             series: [{
-                color: ['#157d90'],
+                color: ['#209cee'],
                 name: 'Routes',
                 type: 'bar',
                 showSymbol: true,
