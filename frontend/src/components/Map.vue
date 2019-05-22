@@ -55,18 +55,20 @@ export default {
       busStops: {
         geojson: [],
         options: {
-          style: function(feature) {
-            return feature.properties && feature.properties.style;
-          },
           onEachFeature: onEachFeature,
           pointToLayer: function(feature, latlng) {
+            const boardingRank  = feature.properties.boardings/feature.properties.maxBoardings;
+            let fillColor = "#41b883";
+            if (boardingRank > 0.66) {
+                fillColor = "#f7735e";
+            } else if (boardingRank > 0.33) {
+                fillColor = "#f9b729";
+            }
             return circleMarker(latlng, {
               radius: 8,
-              fillColor: "#f9b729",
-              color: "#209cee",
-              weight: 0.5,
-              opacity: 0.5,
-              fillOpacity: 0.8
+              fillColor,
+              opacity: 0,
+              fillOpacity: boardingRank + 0.1 
             });
           }
         }

@@ -83,15 +83,21 @@ const getTotalStats = () => async (req, res) => {
 
 const getGeo = () => async (req, res) => {
     const {route} = req.query;
-    const qb = knex(table.stops)
-        .select('stop_id', 'location', 'on_street', 'cross_street', 'boardings', 'alightings', 'routes');
+    const qbs = [
+        knex(table.stops).max('boardings AS maxBoardings'),
+        knex(table.stops)
+            .select('stop_id', 'location', 'on_street', 'cross_street', 'boardings', 'alightings', 'routes')
+    ];
 
     if (route) {
-        qb.whereRaw("'{??}' && routes", [route]);
+        qbs.forEach(qb => qb.whereRaw("'{??}' && routes", [route]));
     }
 
-    const data = await qb;
-    const features = data.map(i => ({
+    const data = await Promise.all(qbs);
+    
+    const {maxBoardings} = data[0][0];
+
+    const features = data[1].map(i => ({
         geometry: {
             type: 'Point',
             coordinates: [i.location[1], i.location[0]]
@@ -102,7 +108,9 @@ const getGeo = () => async (req, res) => {
             crossStreet: i.cross_street,
             boardings: i.boardings,
             alightings: i.alightings,
-            routes: i.routes
+            routes: i.routes,
+            maxBoardings
+
         },
         id: i.stop_id
     }));
