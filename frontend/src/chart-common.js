@@ -1,4 +1,6 @@
 export const MAP_URL = "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWJvdWNoYXVkIiwiYSI6ImNpdTA5bWw1azAyZDIyeXBqOWkxOGJ1dnkifQ.qha33VjEDTqcHQbibgHw3w";
+export const MAP_COORDINATES = [41.8781, -87.6298];
+export const MAP_ZOOM = 11;
 
 export function getBarChartOptions (seriesName, keys, values) {
   return {

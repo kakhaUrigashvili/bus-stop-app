@@ -1,17 +1,20 @@
 <template>
   <div>
-    <h4 class="title"><span>Stops for route # {{route}}</span></h4>
-    <div class="control is-inline-block">
-      <div>Route: </div>
-      <div class="select">
-        <select v-model="route" v-on:change="loadData">
-          <option v-for="option in routes" :key="option" v-bind:value="option">
-            {{ option }}
-          </option>
-        </select>
+    <h4 class="title"><span>Stops for Route(s) # {{selectedRoutes.join()}}</span></h4>
+    <div class="columns">
+      <div class="column is-4">
+        <div class="is-flex">
+         <label>Route</label>
+          <multiselect @input="loadData" v-model="selectedRoutes" :options="routes" :multiple="true"
+          :searchable="true" :close-on-select="true" :show-labels="false"></multiselect>
+        </div>
+      </div>
+      <div class="column">
+        <button class="button is-info" v-on:click="resetMap">Reset Map</button>
       </div>
     </div>
-    <l-map :zoom="zoom" :center="center" style="height: 900px; margin-top: 5px">
+    
+    <l-map ref="map" :zoom="zoom" :center="center" style="height: 900px; margin-top: 5px">
       <l-tile-layer :url="url" :attribution="attribution" />
       <l-geo-json :geojson="busStops.geojson" :options="busStops.options"/>
     </l-map>
@@ -24,7 +27,7 @@ import { circleMarker } from 'leaflet'
 import { LMap, LTileLayer, LGeoJson } from 'vue2-leaflet'
 import PopupContent from './MapPopup'
 import {HTTP} from '../http-common'
-import {MAP_URL} from '../chart-common'
+import {MAP_URL, MAP_COORDINATES, MAP_ZOOM} from '../chart-common'
 
 function onEachFeature(feature, layer) {
   let PopupCont = Vue.extend(PopupContent);
@@ -42,10 +45,10 @@ export default {
   },
   data() {
     return {
-      route: '151',
+      selectedRoutes: ['151'],
       routes: [],
-      zoom: 11,
-      center: [41.8781, -87.6298],
+      zoom: MAP_ZOOM,
+      center: MAP_COORDINATES,
       url: MAP_URL,
       attribution: '',
       busStops: {
@@ -59,9 +62,9 @@ export default {
             return circleMarker(latlng, {
               radius: 8,
               fillColor: "#f9b729",
-              color: "#000",
-              weight: 1,
-              opacity: 1,
+              color: "#209cee",
+              weight: 0.5,
+              opacity: 0.5,
               fillOpacity: 0.8
             });
           }
@@ -71,15 +74,21 @@ export default {
   },
   methods: {
     loadData: async function () {
-      const {data} = await HTTP.get(`geo?route=${this.route}`);
-      this.busStops.geojson = [data];
+      const queryParameters = this.selectedRoutes.map(i => `route[]=${i}`).join('&')
+      const {data} = await HTTP.get(`geo?${queryParameters}`)
+      this.busStops.geojson = [data]
+    },
+    resetMap () {
+      this.$nextTick(() => {
+        this.$refs.map.mapObject.setView(MAP_COORDINATES, MAP_ZOOM)
+      })
     }
   },
   async mounted() {
-    this.loadData();
+    this.loadData()
 
-    const {data} = await HTTP.get('routes');
-    this.routes = data;
+    const {data} = await HTTP.get('routes')
+    this.routes = data
   }
 };
 </script>

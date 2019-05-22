@@ -5,6 +5,7 @@ import ECharts from 'vue-echarts'
 import VueLogger from 'vuejs-logger'
 import "leaflet.icon.glyph"
 import numeral from 'numeral'
+import Multiselect from 'vue-multiselect'
 
 Vue.config.productionTip = false
 
@@ -21,6 +22,7 @@ const options = {
 
 Vue.use(VueLogger, options);
 Vue.component('v-chart', ECharts)
+Vue.component('multiselect', Multiselect)
 
 Vue.filter('formatNumber', function (value) {
   return numeral(value).format("0,0");

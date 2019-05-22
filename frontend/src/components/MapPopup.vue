@@ -1,10 +1,9 @@
 
 <template>
   <div>
-    <p>On Street: {{ onStreet }}</p>
-    <p>Cross Street: {{ crossStreet }}</p>
-    <p>Boardings: {{ boardings }}</p>
-    <p>Alightings: {{ alightings }}</p>
+    <p>On Street: {{ onStreet }} | Cross Street: {{ crossStreet }}</p>
+    <p>Boardings: {{ boardings }} | Alightings: {{ alightings }}</p>
+    <p>Routes: {{ routes.join() }}</p>
     
   </div>
 </template>
@@ -21,13 +20,14 @@ export default {
       type: String,
       default: ""
     },
+    routes: {
+      type: Array
+    },
     boardings: {
-      type: Number,
-      default: ""
+      type: Number
     },
     alightings: {
-      type: Number,
-      default: ""
+      type: Number
     }
   }
 };

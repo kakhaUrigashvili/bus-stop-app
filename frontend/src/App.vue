@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import 'vue-echarts'
 import TotalStats from './components/TotalStats';
 import Map from './components/Map';
 import RouteStats from './components/RouteStats';
@@ -64,6 +65,7 @@ export default {
 <style>
 @import "../node_modules/leaflet/dist/leaflet.css";
 @import "../node_modules/bulma/css/bulma.min.css";
+@import "../node_modules/vue-multiselect/dist/vue-multiselect.min.css";
 
 body {
   background: #f5f5f5;
@@ -78,5 +80,14 @@ body {
 .echarts > div {
   border-radius: 6px;
   box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+}
+
+.multiselect--active {
+    z-index: 5000;
+}
+
+div.is-flex > label {
+  align-self: center;
+  margin-right: 0.7em;
 }
 </style>

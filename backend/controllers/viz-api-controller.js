@@ -55,10 +55,10 @@ const getTotalStats = () => async (req, res) => {
 const getGeo = () => async (req, res) => {
     const {route} = req.query;
     const qb = knex(table.stops)
-        .select('stop_id', 'location', 'on_street', 'cross_street', 'boardings', 'alightings');
+        .select('stop_id', 'location', 'on_street', 'cross_street', 'boardings', 'alightings', 'routes');
 
     if (route) {
-        qb.whereRaw('? = ANY(routes)', [route]);
+        qb.whereRaw("'{??}' && routes", [route]);
     }
 
     const data = await qb;
@@ -72,7 +72,8 @@ const getGeo = () => async (req, res) => {
             onStreet: i.on_street,
             crossStreet: i.cross_street,
             boardings: i.boardings,
-            alightings: i.alightings
+            alightings: i.alightings,
+            routes: i.routes
         },
         id: i.stop_id
     }));
