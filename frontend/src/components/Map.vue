@@ -13,8 +13,8 @@
         <button class="button is-info" v-on:click="resetMap">Reset Map</button>
       </div>
     </div>
-    
-    <l-map ref="map" :zoom="zoom" :center="center" style="height: 900px; margin-top: 5px">
+    <route-stats :route="selectedRoutes" ref="routeStats"></route-stats>
+    <l-map ref="map" :zoom="zoom" :center="center">
       <l-tile-layer :url="url" :attribution="attribution" />
       <l-geo-json :geojson="busStops.geojson" :options="busStops.options"/>
     </l-map>
@@ -36,6 +36,7 @@ function onEachFeature(feature, layer) {
   });
   layer.bindPopup(popup.$mount().$el);
 }
+
 
 export default {
   components: {
@@ -77,6 +78,7 @@ export default {
       const queryParameters = this.selectedRoutes.map(i => `route[]=${i}`).join('&')
       const {data} = await HTTP.get(`geo?${queryParameters}`)
       this.busStops.geojson = [data]
+      this.$refs.routeStats.loadData();
     },
     resetMap () {
       this.$nextTick(() => {

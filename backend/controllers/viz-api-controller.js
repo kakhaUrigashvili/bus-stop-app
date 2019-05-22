@@ -42,12 +42,41 @@ const getStopStats = () => async (req, res) => {
     res.json(data);
 };
 
+const getBoardingStats = () => async (req, res) => {
+    const {limit} = req.query;
+    const qb = knex(table.stops)
+        .select(
+            knex.raw(
+                `stop_id ||'-' || on_street || '/' || cross_street AS stop,
+                boardings AS "numberOfBoardings"`
+            )
+        )
+        .orderBy('numberOfBoardings', 'desc');
+
+    if (limit) {
+        qb.limit(+limit);
+    }
+
+    const data = await qb;
+
+    res.json(data);
+};
+
 const getTotalStats = () => async (req, res) => {
-    const data = await Promise.all([
+    const {route} = req.query;
+    const qbs = [
         knex(table.stops).count('stop_id AS numberOfStops')
-            .sum('boardings AS monthlyNumberOfBoardings'),
+            .sum('boardings AS monthlyNumberOfBoardings')
+            .avg('boardings AS averageMonthlyNumberOfBoardingsPerStop'),
         knex(table.routes).count('route AS numberOfRoutes')
-    ]);
+    ];
+
+    if (route) {
+        qbs[0].whereRaw("'{??}' && routes", [route]);
+        qbs[1].whereIn('route', route);
+    }
+
+    const data = await Promise.all(qbs);
 
     res.json(Object.assign({}, data[0][0], data[1][0]));
 };
@@ -95,6 +124,7 @@ const getRoutes = () => async (req, res) => {
 module.exports = {
     getRouteStats,
     getStopStats,
+    getBoardingStats,
     getTotalStats,
     getGeo,
     getRoutes

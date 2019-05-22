@@ -4,19 +4,19 @@
     <div class="tile is-parent">
       <article class="tile is-child box">
         <p class="title">{{chartData.numberOfStops | formatNumber}}</p>
-        <p class="subtitle"># Stops</p>
+        <p class="subtitle"># of Stops</p>
       </article>
     </div>
     <div class="tile is-parent">
       <article class="tile is-child box">
         <p class="title">{{chartData.numberOfRoutes | formatNumber}}</p>
-        <p class="subtitle"># Routes</p>
+        <p class="subtitle"># of Routes</p>
       </article>
     </div>
     <div class="tile is-parent">
       <article class="tile is-child box">
         <p class="title">{{chartData.monthlyNumberOfBoardings | formatNumber}}</p>
-        <p class="subtitle"># Monthly Boardings</p>
+        <p class="subtitle"># of Monthly Boardings</p>
       </article>
     </div>
   </div>

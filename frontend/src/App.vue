@@ -14,8 +14,7 @@
               </a>
               <div class="navbar-dropdown">
                 <a class="navbar-item" href="#map">Map</a>
-                <a class="navbar-item" href="#toproutes">Top 10 Routes by # of Stops</a>
-                <a class="navbar-item" href="#topstops">Top 10 Stops by # of Routes</a>
+                <a class="navbar-item" href="#topn">Top N</a>
               </div>
             </div>
           </div>
@@ -31,14 +30,9 @@
           <Map/>
         </div>
       </div>
-      <div class="section" id="toproutes">
+      <div class="section" id="topn">
         <div class="container">
-          <RouteStats/>
-        </div>
-      </div>
-      <div class="section" id="topstops">
-        <div class="container">
-          <StopStats/>
+          <TopN/>
         </div>
       </div>
   </div>
@@ -48,16 +42,14 @@
 import 'vue-echarts'
 import TotalStats from './components/TotalStats';
 import Map from './components/Map';
-import RouteStats from './components/RouteStats';
-import StopStats from './components/StopStats';
+import TopN from './components/TopN';
 
 export default {
   name: 'app',
   components: {
     TotalStats,
     Map,
-    RouteStats,
-    StopStats
+    TopN
   }
 }
 </script>
@@ -89,5 +81,11 @@ body {
 div.is-flex > label {
   align-self: center;
   margin-right: 0.7em;
+}
+
+#map .vue2leaflet-map {
+  height: 600px; 
+  margin-top: 5px; 
+  border-radius: 6px;
 }
 </style>

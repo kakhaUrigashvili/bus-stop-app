@@ -1,44 +1,50 @@
 <template>
-<div>
-  <h4 class="title"><span>Top {{limit}} Routes by # of Stops</span></h4>
-  <div class="control is-inline-block">
-    <div># item(s): </div>
-    <input class="input" type="number" min="3" max="15" v-model="limit" v-on:change="loadData">
+<div v-if="chartData">
+  <div class="tile is-ancestor" style="margin-bottom:10px">
+    <div class="tile is-parent">
+      <article class="tile is-child box">
+        <p class="title is-size-6">{{chartData.numberOfStops | formatNumber}}</p>
+        <p class="subtitle is-size-6"># of Stops</p>
+      </article>
+    </div>
+    <div class="tile is-parent">
+      <article class="tile is-child box">
+        <p class="title is-size-6">{{chartData.averageMonthlyNumberOfBoardingsPerStop | formatNumber}}</p>
+        <p class="subtitle is-size-6">Avg Boardings per Stop</p>
+      </article>
+    </div>
+    <div class="tile is-parent">
+      <article class="tile is-child box">
+        <p class="title is-size-6">{{chartData.monthlyNumberOfBoardings | formatNumber}}</p>
+        <p class="subtitle is-size-6"># of Monthly Boardings</p>
+      </article>
+    </div>
   </div>
-  
-  <v-chart :options="chartData"/>
 </div>
 </template>
 
 <script>
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/title'
 import {HTTP} from '../http-common'
-import {getBarChartOptions} from '../chart-common'
 
 export default {
+  name: "RouteStats",
+  props: {
+    route: {
+      type: Array,
+      default: []
+    }
+  },
   data () {
     return {
-      chartData: null,
-      limit: 10
+      chartData: null
     }
   },
   methods: {
-    loadData: async function () {
-      let {data} = await HTTP.get(`stats/route?limit=${this.limit}`)
-    
-      // sort asc for chart
-      data = data.sort((a,b) => a.numberOfStops - b.numberOfStops)
-
-      const values = data.map(i => i.numberOfStops)
-      const keys = data.map(i => `Route # : ${i.route}`)
-
-      this.chartData = getBarChartOptions('Routes', keys, values)
+    async loadData() {
+      const queryParameters = this.route.map(i => `route[]=${i}`).join('&')
+      const {data} = await HTTP.get(`stats/total?${queryParameters}`)
+      this.chartData = data
     }
-  },
-  mounted () {
-    this.loadData()
   }
 }
 </script>
