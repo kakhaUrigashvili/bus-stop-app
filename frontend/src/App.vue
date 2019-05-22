@@ -28,42 +28,35 @@
       </div>
       <div class="section" id="map">
         <div class="container">
-          <h4 class="title"><span>Map</span></h4>
-          <GeoJSON2/>
+          <Map/>
         </div>
       </div>
       <div class="section" id="toproutes">
         <div class="container">
-          <h4 class="title"><span>Top 10 Routes by # of Stops</span></h4>
-          <MostRoutesByStop/>
+          <RouteStats/>
         </div>
       </div>
       <div class="section" id="topstops">
         <div class="container">
-          <h4 class="title"><span>Top 10 Stops by # of Routes</span></h4>
-          <MostStopsByRoute/>
+          <StopStats/>
         </div>
       </div>
-    
   </div>
-      
-
 </template>
 
 <script>
-
-import TotalStats from "./components/TotalStats";
-import GeoJSON2 from "./components/GeoJSON2";
-import MostRoutesByStop from "./components/MostRoutesByStop";
-import MostStopsByRoute from "./components/MostStopsByRoute";
+import TotalStats from './components/TotalStats';
+import Map from './components/Map';
+import RouteStats from './components/RouteStats';
+import StopStats from './components/StopStats';
 
 export default {
   name: 'app',
   components: {
     TotalStats,
-    GeoJSON2,
-    MostRoutesByStop,
-    MostStopsByRoute
+    Map,
+    RouteStats,
+    StopStats
   }
 }
 </script>
@@ -79,7 +72,11 @@ body {
 .echarts {
   width: 100%;
   height: 600px;
+  margin-top: 5px;
 }
 
-
+.echarts > div {
+  border-radius: 6px;
+  box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+}
 </style>

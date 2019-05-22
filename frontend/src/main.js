@@ -1,12 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { Icon } from "leaflet";
+import { Icon } from "leaflet"
 import ECharts from 'vue-echarts'
 import VueLogger from 'vuejs-logger'
-import Vuikit from 'vuikit'
-import VuikitIcons from '@vuikit/icons'
-import "leaflet.icon.glyph";
-import '@vuikit/theme'
+import "leaflet.icon.glyph"
+import numeral from 'numeral'
 
 Vue.config.productionTip = false
 
@@ -22,9 +20,12 @@ const options = {
 };
 
 Vue.use(VueLogger, options);
-Vue.use(Vuikit)
-Vue.use(VuikitIcons)
 Vue.component('v-chart', ECharts)
+
+Vue.filter('formatNumber', function (value) {
+  return numeral(value).format("0,0");
+});
+
 new Vue({
   render: h => h(App),
 }).$mount('#app')

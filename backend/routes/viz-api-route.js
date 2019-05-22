@@ -3,11 +3,10 @@ const controller = require('./../controllers/viz-api-controller');
 
 const router = express.Router();
 
-router.get('/routes-most-stops', controller.getRoutesWithMostStops());
-router.get('/stops-most-routes', controller.getStopsWithMostRoutes());
-router.get('/total-stats', controller.getTotalStats());
-router.get('/boardings-per-location', controller.getBoardingsPerLocation());
-router.get('/chicago-geo-map', controller.chicagoGeo());
-router.get('/geo-points', controller.geoPoints());
+router.get('/stats/route', controller.getRouteStats());
+router.get('/stats/stop', controller.getStopStats());
+router.get('/stats/total', controller.getTotalStats());
+router.get('/geo', controller.getGeo());
+router.get('/routes', controller.getRoutes());
 
 module.exports = router;

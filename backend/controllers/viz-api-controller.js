@@ -1,89 +1,78 @@
-const path = require('path');
-const fs = require('fs');
-const {promisify} = require('util');
 const knex = require('./../database/knex');
 
-const readFileAsync = promisify(fs.readFile);
-const TABLE = 'stops';
-
-const getRoutesWithMostStops = () => async (req, res) => {
-    const data = await knex.raw(`
-    SELECT
-    unnest(routes) AS route,
-    count(stop_id) AS number_of_stops
-    FROM ${TABLE}
-    GROUP BY route
-    ORDER BY number_of_stops DESC
-    LIMIT 10;`);
-    res.json(data.rows);
+const table = {
+    stops: 'stops',
+    routes: 'routes',
+    stopRoutes: 'stop_routes'
 };
 
-const getStopsWithMostRoutes = () => async (req, res) => {
-    const data = await knex.raw(`
-    SELECT 
-    stop_name,
-    COUNT(DISTINCT route) AS number_of_routes
-    FROM (
-    SELECT
-        stop_id || ':'||on_street||'/'||cross_street AS stop_name,
-        
-        unnest(routes) AS route
-    FROM ${TABLE}
-    ) AS t
-    GROUP BY stop_name
-    ORDER BY number_of_routes DESC
-    LIMIT 10;`);
-    res.json(data.rows);
+const getRouteStats = () => async (req, res) => {
+    const {limit} = req.query;
+    const qb = knex(table.stopRoutes)
+        .select('route').count('stop_id AS numberOfStops')
+        .groupBy('route')
+        .orderBy('numberOfStops', 'desc');
+
+    if (limit) {
+        qb.limit(+limit);
+    }
+
+    const data = await qb;
+
+    res.json(data);
 };
 
-const getBoardingsPerLocation = () => async (req, res) => {
-    const data = await knex.raw(`
-    SELECT on_street||'/'||cross_street AS name, 
-    array_append(location,boardings::float) AS value 
-    FROM ${TABLE};`);
-    res.json(data.rows);
+const getStopStats = () => async (req, res) => {
+    const {limit} = req.query;
+    const qb = knex(table.stops)
+        .select(
+            knex.raw(
+                `stop_id ||'-' || on_street || '/' || cross_street AS stop,
+                cardinality(routes) AS "numberOfRoutes"`
+            )
+        )
+        .orderBy('numberOfRoutes', 'desc');
+
+    if (limit) {
+        qb.limit(+limit);
+    }
+
+    const data = await qb;
+
+    res.json(data);
 };
 
 const getTotalStats = () => async (req, res) => {
-    const data = await knex.raw(`
-    SELECT 
-        COUNT(DISTINCT stop_id) AS "numberOfStops",
-        COUNT(DISTINCT route) AS "numberOfRoutes",
-        (SELECT SUM(boardings) FROM ${TABLE})::INT AS "monthlyNumberOfBoardings"
-    FROM (
-    SELECT
-        stop_id,
-        UNNEST(routes) AS route
-    FROM
-    ${TABLE}
-    ) AS T;`);
-    res.json(data.rows[0]);
+    const data = await Promise.all([
+        knex(table.stops).count('stop_id AS numberOfStops')
+            .sum('boardings AS monthlyNumberOfBoardings'),
+        knex(table.routes).count('route AS numberOfRoutes')
+    ]);
+
+    res.json(Object.assign({}, data[0][0], data[1][0]));
 };
 
-const chicagoGeo = () => async (req, res) => {
-    const filePath = path.join(__dirname, '../resources', 'chicago.geojson');
-    const data = await readFileAsync(filePath, 'utf8');
-    res.set('Content-Type', 'application/json');
-    res.send(data);
-};
+const getGeo = () => async (req, res) => {
+    const {route} = req.query;
+    const qb = knex(table.stops)
+        .select('stop_id', 'location', 'on_street', 'cross_street', 'boardings', 'alightings');
 
-const geoPoints = () => async (req, res) => {
-    const data = await knex.raw(`
-    SELECT
-        stop_id,
-        location,
-        on_street,
-        cross_street
-    FROM
-        ${TABLE};`);
-    const features = data.rows.map(i => ({
+    if (route) {
+        qb.whereRaw('? = ANY(routes)', [route]);
+    }
+
+    const data = await qb;
+    const features = data.map(i => ({
         geometry: {
             type: 'Point',
             coordinates: [i.location[1], i.location[0]]
         },
         type: 'Feature',
         properties: {
-            popupContent: `${i.on_street}/${i.cross_street}`
+            onStreet: i.on_street,
+            crossStreet: i.cross_street,
+            boardings: i.boardings,
+            alightings: i.alightings
         },
         id: i.stop_id
     }));
@@ -96,11 +85,16 @@ const geoPoints = () => async (req, res) => {
     res.json(geoJson);
 };
 
+const getRoutes = () => async (req, res) => {
+    const data = await knex(table.routes).orderBy('route');
+
+    res.json(data.map(i => i.route));
+};
+
 module.exports = {
-    getRoutesWithMostStops,
-    getStopsWithMostRoutes,
+    getRouteStats,
+    getStopStats,
     getTotalStats,
-    getBoardingsPerLocation,
-    chicagoGeo,
-    geoPoints
+    getGeo,
+    getRoutes
 };
