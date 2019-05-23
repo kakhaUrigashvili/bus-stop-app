@@ -3,19 +3,19 @@
   <div class="tile is-ancestor" style="margin-bottom:10px">
     <div class="tile is-parent">
       <article class="tile is-child box">
-        <p class="title is-size-6">{{chartData.numberOfStops | formatNumber}}</p>
+        <p class="title is-size-5">{{chartData.numberOfStops | formatNumber}}</p>
         <p class="subtitle is-size-6"># of Stops</p>
       </article>
     </div>
     <div class="tile is-parent">
       <article class="tile is-child box">
-        <p class="title is-size-6">{{chartData.averageMonthlyNumberOfBoardingsPerStop | formatNumber}}</p>
+        <p class="title is-size-5">{{chartData.averageMonthlyNumberOfBoardingsPerStop | formatNumber}}</p>
         <p class="subtitle is-size-6">Avg Boardings per Stop</p>
       </article>
     </div>
     <div class="tile is-parent">
       <article class="tile is-child box">
-        <p class="title is-size-6">{{chartData.monthlyNumberOfBoardings | formatNumber}}</p>
+        <p class="title is-size-5">{{chartData.monthlyNumberOfBoardings | formatNumber}}</p>
         <p class="subtitle is-size-6"># of Monthly Boardings</p>
       </article>
     </div>

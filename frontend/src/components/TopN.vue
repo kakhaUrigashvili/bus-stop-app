@@ -50,9 +50,17 @@ export default {
         keyPrefix: ''
       },
       {
+        name: 'Top N Routes by # of Boardings',
+        template: 'Top {limit} Routes by # of Boardings',
+        key: 'boarding-routes',
+        valueProperty: 'numberOfBoardings',
+        keyProperty: 'route',
+        keyPrefix: 'Route # : '
+      },
+      {
         name: 'Top N Stops by # of Boardings',
         template: 'Top {limit} Stops by # of Boardings',
-        key: 'boarding',
+        key: 'boarding-stops',
         valueProperty: 'numberOfBoardings',
         keyProperty: 'stop',
         keyPrefix: ''

@@ -42,7 +42,25 @@ const getStopStats = () => async (req, res) => {
     res.json(data);
 };
 
-const getBoardingStats = () => async (req, res) => {
+const getRouteBoardingStats = () => async (req, res) => {
+    const {limit} = req.query;
+
+    const qb = knex.from(table.stopRoutes)
+        .select('route').sum('boardings AS numberOfBoardings')
+        .innerJoin(table.stops, `${table.stops}.stop_id`, `${table.stopRoutes}.stop_id`)
+        .groupBy('route')
+        .orderBy('numberOfBoardings', 'desc');
+
+    if (limit) {
+        qb.limit(+limit);
+    }
+
+    const data = await qb;
+
+    res.json(data);
+};
+
+const getStopBoardingStats = () => async (req, res) => {
     const {limit} = req.query;
     const qb = knex(table.stops)
         .select(
@@ -94,7 +112,7 @@ const getGeo = () => async (req, res) => {
     }
 
     const data = await Promise.all(qbs);
-    
+
     const {maxBoardings} = data[0][0];
 
     const features = data[1].map(i => ({
@@ -132,7 +150,8 @@ const getRoutes = () => async (req, res) => {
 module.exports = {
     getRouteStats,
     getStopStats,
-    getBoardingStats,
+    getRouteBoardingStats,
+    getStopBoardingStats,
     getTotalStats,
     getGeo,
     getRoutes
