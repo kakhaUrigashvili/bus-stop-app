@@ -30,8 +30,7 @@ export default {
   name: "RouteStats",
   props: {
     route: {
-      type: Array,
-      default: []
+      type: Array
     }
   },
   data () {
