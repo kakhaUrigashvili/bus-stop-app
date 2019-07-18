@@ -1,10 +1,10 @@
 FROM node:10.15.3-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /backend
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --silent
 
 COPY . .
 
