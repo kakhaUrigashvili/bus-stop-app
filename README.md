@@ -17,5 +17,6 @@ docker-compose exec backend npm run migrate:latest && docker-compose exec backen
 ```
 
 Backend should be accessible on http://localhost:3000
+
 Frontend should be accessible on http://localhost:8080
 
